@@ -100,7 +100,7 @@ while noPort:
         port = int(input("port> "))
         noPort = False
     except Exception:
-        pritn("Bruh that is not an int.")
+        print("Bruh that is not an int.")
 client(ip, port, TOFILE, FROMFILE, EOL)
 # GG <3
 # Made By Sam with Love and no gen ai :)
