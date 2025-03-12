@@ -12,7 +12,7 @@ from websockets.asyncio.client import connect
 
 def check_setup() -> list:
     """This function checks the users current operating system and returns
-    the correct values needed for communication through audacity.
+    the correct values needed for communication through Audacity.
     This is bad code. """
     if sys.platform == 'win32':
         print("Hello world! Starting setup.")
@@ -28,19 +28,19 @@ def check_setup() -> list:
         return [TONAME, FROMNAME, EOL]
 
 def record_command(TOFILE, EOL) -> None:
-    """Send the record command to audacity."""
+    """Send the record command to Audacity."""
     print("Attempting to toggle recording.")
     TOFILE.write("Record1stChoice:" + EOL)
     TOFILE.flush()
 
 def pause_command(TOFILE, EOL) -> None:
-    """Send the pause command to audacity."""
+    """Send the pause command to Audacity."""
     print("Attempting to pause recording.")
     TOFILE.write("Pause:" + EOL)
     TOFILE.flush()
 
 def audacity_check(TONAME, FROMNAME) -> None:
-    """Check audacity is set up and working correctly."""
+    """Check Audacity is set up and working correctly."""
     print("Write to  \"" + TONAME + "\"")
     if not os.path.exists(TONAME):
         print(" ..does not exist.  Ensure Audacity is running with mod-script-pipe.")
