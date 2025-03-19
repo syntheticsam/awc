@@ -8,7 +8,9 @@ https://github.com/audacity/audacity/blob/release-3.7.2/scripts/piped-work/pipe_
 import sys
 import os
 import asyncio
-from websockets.asyncio.client import connect
+from importlib.resources import is_resource
+
+from websockets.asyncio.server import serve
 
 def check_setup() -> list:
     """This function checks the users current operating system and returns
@@ -51,33 +53,24 @@ def audacity_check(TONAME, FROMNAME) -> None:
         print(" ..does not exist.  Ensure Audacity is running with mod-script-pipe.")
         sys.exit()
 
-def offline_test(TOFILE, FROMFILE, EOL) -> None:
-    """This is here to test that audacity does infact accept my recordings
-    Also crashes it :3 """
-    while True:
-        r = 0
-        match r:
-            case 0:
-                record_command(TOFILE, EOL)
-                r = 1
-            case 1:
-                pause_command(TOFILE, EOL)
-                r = 0
 
-async def client(ip:str, port:int, TOFILE, FROMFILE, EOL):
+async def commander(websocket):
+    global TOFILE, FROMFILE, EOL
+    while True:
+        message = websocket.recv()
+        if message == 'recStop':
+            pause_command(TOFILE, EOL)
+        elif message == 'recStart':
+            record_command(TOFILE, EOL)
+        else:
+            print()
+
+
+async def main():
     """Main function. This checks for new commands asyncronusly and runs them
     if so."""
-    is_recording = False
-    async with connect(f'ws://{ip}:{port}') as websocket:
-        await websocket.send("Client Connected!")
-        message = await websocket.recv()
-        if message == 'rec' and is_recording:
-            pause_command(TOFILE, EOL)
-            await websocket.send("rcFalse")
-        else:
-            record_command(TOFILE, EOL)
-            await websocket.send("rcTrue")
-
+    async with serve(commander, "localhost", 8001) as server:
+        await server.serve_forever()
 
 
 # The following is bad code. But ahh well.
@@ -93,14 +86,7 @@ print("-- File to write to has been opened")
 FROMFILE = open(FROMNAME, 'rt')
 print("-- File to read from has now been opened too\r\n")
 
-ip = input("ip> ")
-noPort= True
-while noPort:
-    try:
-        port = int(input("port> "))
-        noPort = False
-    except Exception:
-        print("Bruh that is not an int.")
-client(ip, port, TOFILE, FROMFILE, EOL)
+
+asyncio.run(main())
 # GG <3
 # Made By Sam with Love and no gen ai :)
