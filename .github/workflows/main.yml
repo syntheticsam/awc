@@ -1,2 +1,10 @@
-- name: PyInstaller Action
-  uses: Martin005/pyinstaller-action@v1.2.0
+name: PyInstall!
+run-name: Deploy! 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: PyInstaller Action
+        uses: Martin005/pyinstaller-action@v1.2.0
