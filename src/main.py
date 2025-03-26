@@ -74,17 +74,22 @@ async def main():
 
 
 # The following is bad code. But ahh well.
-setup_list = check_setup()
-TONAME = setup_list[0]
-FROMNAME = setup_list[1]
-EOL = setup_list[2]
+try:
+    setup_list = check_setup()
+    TONAME = setup_list[0]
+    FROMNAME = setup_list[1]
+    EOL = setup_list[2]
 
-audacity_check(TONAME, FROMNAME)
+    audacity_check(TONAME, FROMNAME)
 
-TOFILE = open(TONAME, 'w')
-print("-- File to write to has been opened")
-FROMFILE = open(FROMNAME, 'rt')
-print("-- File to read from has now been opened too\r\n")
+    TOFILE = open(TONAME, 'w')
+    print("-- File to write to has been opened")
+    FROMFILE = open(FROMNAME, 'rt')
+    print("-- File to read from has now been opened too\r\n")
+except Exception:
+    print("Bro what")
+    while input(">") != "":
+        pass
 
 
 asyncio.run(main())
