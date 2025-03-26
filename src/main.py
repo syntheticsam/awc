@@ -8,8 +8,6 @@ https://github.com/audacity/audacity/blob/release-3.7.2/scripts/piped-work/pipe_
 import sys
 import os
 import asyncio
-from importlib.resources import is_resource
-
 from websockets.asyncio.server import serve
 
 def check_setup() -> list:
@@ -56,14 +54,16 @@ def audacity_check(TONAME, FROMNAME) -> None:
 
 async def commander(websocket):
     global TOFILE, FROMFILE, EOL
-    while True:
-        message = websocket.recv()
-        if message == 'recStop':
+    async for message in websocket:
+        a = message.split()
+        if a[0] == "recStop":
+            print("Pausing!")
             pause_command(TOFILE, EOL)
-        elif message == 'recStart':
+        elif a[0] == "recStart":
+            print("Recording")
             record_command(TOFILE, EOL)
         else:
-            print()
+            print(message)
 
 
 async def main():
