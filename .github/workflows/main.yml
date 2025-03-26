@@ -12,4 +12,4 @@ jobs:
           spec: 'src/main.py'
           requirements: 'src/requirements.txt'
           upload_exe_with_name: 'AWC'
-          options: --onedir, --name "AWC1", --console, 
+          options: --onefile, --name "AWC", --console
